@@ -1,5 +1,11 @@
 var list =$(), timeout;
 
+//add custom css
+
+var iconurl = chrome.extension.getURL("split.png");
+document.styleSheets[0].insertRule('.resultsSo ~ .split::after {background-image: url('+iconurl+');}', 0);
+
+
 $("body").bind("DOMSubtreeModified", function() {
 	clearTimeout(timeout);
 	timeout = setTimeout(function(){
@@ -8,7 +14,7 @@ $("body").bind("DOMSubtreeModified", function() {
 });
 
 // var re = /^(?:https?:\/\/.*stackoverflow.com\/questions\/)/ig;
-var re = /^((?:https?:\/\/.*stackoverflow.com\/questions\/)|(?:https?:\/\/.*stackexchange.com\/questions\/))/ig;
+var re = /^((?:https?:\/\/.*stackoverflow.com\/questions\/\d+)|(?:https?:\/\/.*stackexchange.com\/questions\/\d+))/ig;
 updateDom();	
 
 
@@ -34,23 +40,42 @@ function updateDom(){
 	n.parent().siblings('.s').hide();
 	fetchLinks(n.not(list));
 	list = list.add(n);
-	console.log(list);
-	
 }
 
+function openTab (url) {
+	var win = window.open(url, '_blank');
+	win.focus();
+}
 
 function fetchLinks (eles) {
 	if (!eles) return;
+
 	eles.each(function(){
+		var html;
 		var ele = $(this);
-		$.get(ele.attr('href').replace('http:','https://')).done(function(data) {
+ 		var url = ele.attr('href').replace('http:','https://');
+		
+
+		$.get(url).done(function(data) {
 			var dummy = $('<div>');
 			dummy.html(data);
-			var votes =$('<div class="votesSo">');
+			var votes = $('<div class="votesSo">');
 			if (dummy.find('.vote-accepted-on').length>0) votes.addClass('soAccepted');
 			votes.text(dummy.find('#question .vote-count-post').text());
-    		ele.parent().append(votes)
+    		ele.parent().append(votes);
+    		addSplitIcon();
   		});
+
+  		function addSplitIcon() {
+  			var line = $('<div class="splitLine">'), splitIcon = $('<div class="split">');
+
+			splitIcon
+			.hover(function(){line.show();},function(){line.hide();})
+			.click(function(){openTab(url);});
+
+			ele.before(line);
+			ele.after(splitIcon);
+  		}
 	});
 	
 }
