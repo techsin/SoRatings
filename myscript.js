@@ -6,12 +6,27 @@ var iconurl = chrome.extension.getURL("split.png");
 document.styleSheets[0].insertRule('.resultsSo ~ .split::after {background-image: url('+iconurl+');}', 0);
 
 
+//allow-scripts
+var iframe = $('<iframe id="previewIframeSo" sandbox="allow-forms allow-same-origin"></iframe>');
+var previewText = $('<div id="soPreviewTop">').text('Preview');
+var wrapper  = $("<div id='soWrapper'>");
+var xIcon = $("<span id='xIconSo'>x</span>")
+previewText.append(xIcon);
+wrapper.append(iframe).append(previewText);
+
+xIcon.click(function(){
+	wrapper.stop().fadeOut();		
+});
+
 $("body").bind("DOMSubtreeModified", function() {
 	clearTimeout(timeout);
 	timeout = setTimeout(function(){
 		updateDom();
 	},400);
-});
+}).prepend(wrapper);
+
+
+
 
 // var re = /^(?:https?:\/\/.*stackoverflow.com\/questions\/)/ig;
 var re = /^((?:https?:\/\/.*stackoverflow.com\/questions\/\d+)|(?:https?:\/\/.*stackexchange.com\/questions\/\d+))/ig;
@@ -25,9 +40,9 @@ function updateDom(){
 		var d= re.test($(this).data("href"));
 		var hr= re.test($(this).attr("href"));
 		if (d && !hr) $(this).attr("href", $(this).data("href"));
-		return (hr||d) && true;
+		return hr||d;
 	});	
-
+	//filter out double links, google quirks
 	n = n.not('.fl');
 	n.css({
 		'color': 'rgb(255, 255, 255)',
@@ -49,7 +64,9 @@ function openTab (url) {
 
 function fetchLinks (eles) {
 	if (!eles) return;
-
+	eles.mouseover(function(){
+		console.log($(this).attr('href'));
+	});
 	eles.each(function(){
 		var html;
 		var ele = $(this);
@@ -71,7 +88,12 @@ function fetchLinks (eles) {
 
 			splitIcon
 			.hover(function(){line.show();},function(){line.hide();})
-			.click(function(){openTab(url);});
+			.click(function(){
+				//openTab(url);
+				wrapper.stop().fadeIn();
+				iframe.attr('src', url);
+				iframe.contents().find('#noscript-warning').remove();
+			});
 
 			ele.before(line);
 			ele.after(splitIcon);

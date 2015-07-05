@@ -79,3 +79,49 @@ a.resultsSo + .split:hover {
   	right: -10px;
 }
 
+#previewIframeSo {
+	width: 100%;
+	height: 100%;
+}
+
+#soPreviewTop {
+	color: #fff;
+	z-index: 999999;
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 100%;
+	height: 30px;
+	line-height: 30px;
+	text-align: center;
+	background-color: orange;
+}
+
+#soWrapper {
+	display: none;
+	z-index: 999998;
+	position: fixed;
+	top: 0;
+	right: 0;
+	width: 50%;
+	height: 100%;
+	box-sizing: border-box;
+}
+
+#xIconSo {
+	cursor: pointer;
+	display: block;
+	width: 15px;
+	height: 15px;
+	line-height: 14px;
+	position: absolute;
+	left: 5px;
+	top: 50%;
+	transform: translateY(-50%) ;
+	padding: 4px;
+	background-color: #E7700D;
+}
+
+#xIconSo:hover {
+	background-color: black;
+}

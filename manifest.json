@@ -5,8 +5,11 @@
   "icons": { "128": "icon.png" },
   "author": "techsin",
   "permissions": [
-    "tabs", "http://*/*", "https://*/*"
+    "tabs", "http://*/*", "https://*/*", "<all_urls>","activeTab", "webRequest", "webRequestBlocking"
   ],
+  "background": {
+    "scripts": ["bg.js"]
+  },
   "incognito" : "spanning",
   "content_scripts": [{
   "matches": [
