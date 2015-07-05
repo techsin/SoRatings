@@ -1,6 +1,9 @@
 # SoRatings
 A chrome extension that highlights the SO results in google search..
 
+https://chrome.google.com/webstore/detail/so-google-enhancer/anagaadjinebjhjfhfgbjchdbgbedncg/reviews?hl=en-US&gl=US
+
+
 this extension needs constant maintenance since it depends on layout of search results AND SO page.
 Please push fixes and better approaches.
 
